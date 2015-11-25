@@ -17,7 +17,7 @@
 
  */
 
-int SerialInput;
+int SerialInput; // test val
 int light = 0;
 int ledPin = 9;    // LED connected to digital pin 9
 

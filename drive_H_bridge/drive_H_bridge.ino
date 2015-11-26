@@ -28,9 +28,12 @@ void setup()
  
 void loop()
 {
-/*  digitalWrite(enable, 0);
-  analogWrite(motorL, 0);
-  analogWrite(motorR, 0);*/    
+  digitalWrite(enableL, 1);
+  digitalWrite(enableR,1);
+  analogWrite(motorLF, 200);
+  analogWrite(motorRF, 200);
+  analogWrite(motorLR, 0);
+  analogWrite(motorRR, 0);    
   
 
     
@@ -42,26 +45,50 @@ void loop()
   }
 
   if(start == 1){
-       smootturn(1,11500);
+       driveforward(1);
+//       drivereverse(1);
     }
     start = 0;
 }
 
-/*** function ***/
+/*** functions ***/
+
 /*** drive ***/
-int drive(int distance){
+int driveforward(int distance){
   int meter = 2800 * distance;
-  digitalWrite(enable, 1);
-  analogWrite(motorL, 145);
-  analogWrite(motorR, 155);
+  digitalWrite(enableL, 1);
+  digitalWrite(enableR, 1);
+  analogWrite(motorLF, 0);
+  analogWrite(motorRF, 0);
+  analogWrite(motorLR, 200);
+  analogWrite(motorRR, 200);
   delay(meter);
-  digitalWrite(enable, 0);
-  analogWrite(motorL, 0);
-  analogWrite(motorR, 0);
+  digitalWrite(enableL, 1);
+  digitalWrite(enableR, 1);
+  analogWrite(motorLF, 0);
+  analogWrite(motorRF, 0);
+  analogWrite(motorLR, 0);
+  analogWrite(motorRR, 0);
   return 0; 
 }
 
-/*** sharpturn ***/
+int drivereverse(int distance){
+  int meter = 2800 * distance;
+  digitalWrite(enableL, 1);
+  digitalWrite(enableR, 1);
+  analogWrite(motorLR, 200);
+  analogWrite(motorRR, 200);
+  analogWrite(motorLF, 0);
+  analogWrite(motorRF, 0);
+  delay(meter);
+  digitalWrite(enableL, 1);
+  digitalWrite(enableR, 1);
+  analogWrite(motorLR, 0);
+  analogWrite(motorRR, 0);
+  return 0; 
+}
+/*
+/*** sharpturn 
 void sharpturn(int dir, int angle){
   digitalWrite(enable, 1);
   switch(dir){
@@ -77,8 +104,8 @@ void sharpturn(int dir, int angle){
       break;
   }
 }
-
-/*** smoothturn ***/
+*/
+/*** smoothturn 
 void smootturn(int dir, int timedel){
   digitalWrite(enable, 1);
   switch(dir){
@@ -94,6 +121,7 @@ void smootturn(int dir, int timedel){
       break;
   }
 }
-/*** function ***/
+*/
+
 
 

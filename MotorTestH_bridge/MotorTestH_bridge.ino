@@ -19,10 +19,10 @@ int rightMotorEnable = 10; // pin 11 på arduino forbunet til pin 9 på motor dr
 void setup() {
   // put your setup code here, to run once:
   pinMode(leftMotorF,OUTPUT);
-  pinMode(leftMotorF,OUTPUT);
+  pinMode(leftMotorR,OUTPUT);
   pinMode(leftMotorEnable,OUTPUT);
   pinMode(rightMotorF,OUTPUT);
-  pinMode(rightMotorF,OUTPUT);
+  pinMode(rightMotorR,OUTPUT);
   pinMode(rightMotorEnable,OUTPUT);
 
   digitalWrite(leftMotorEnable, HIGH);

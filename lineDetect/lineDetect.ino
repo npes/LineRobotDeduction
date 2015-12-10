@@ -1,31 +1,49 @@
 //PCINT0_vect D8 - D13
 // PCINT1_vect A0 - A5
 // PCINT2_vect D0 - D7
-
-byte leftTacho = 0;
-byte rightTacho = 0;
+void pciSetup(byte pin)
+{
+  *digitalPinToPCMSK(pin) |= bit (digitalPinToPCMSKbit(pin));  // enable pin
+   PCIFR  |= bit (digitalPinToPCICRbit(pin)); // clear any outstanding interrupt
+   PCICR  |= bit (digitalPinToPCICRbit(pin)); // enable interrupt for the group
+}
+ISR (PCINT0_vect) // handle pin change interrupt for D8 to D13 here
+{
+  delay (400);
+  digitalRead(12);
+  Serial.println(" - int - ");
+}
+ISR (PCINT1_vect) // handle pin change interrupt for A0 to A5 here
+{
+  //digitalWrite(13,digitalRead(A0));
+}
+ISR (PCINT2_vect) // handle pin change interrupt for D0 to D7 here
+{
+  //digitalWrite(13,digitalRead(7));
+}
 
 void setup() 
 {
   Serial.begin(9600);
   
 // initialise analog port as input and setting pull up resisters
-  pinMode(0, INPUT);     // Pin A0 is input to which a switch is connected
-  digitalWrite(0, HIGH);   // Configure internal pull-up resistor
-  pinMode(1, INPUT);    // Pin A1 is input to which a switch is connected
-  digitalWrite(1, HIGH);   // Configure internal pull-up resistor
-  pinMode(2, INPUT);    // Pin A2 is input to which a switch is connected
-  digitalWrite(2, HIGH);   // Configure internal pull-up resistor
-  pinMode(4, INPUT);    // Pin A3 is input to which a switch is connected
-  digitalWrite(4, HIGH);   // Configure internal pull-up resistor
+  pinMode(12, INPUT_PULLUP);     // Pin 12 is input to which a switch is connected
+//  pinMode(1, INPUT_PULLUP);    // Pin A1 is input to which a switch is connected
+//  pinMode(2, INPUT_PULLUP);    // Pin A2 is input to which a switch is connected
+//  pinMode(4, INPUT_PULLUP);    // Pin A3 is input to which a switch is connected
 
-// InitialiseInterrupt
+//enable interrupt for pin
+
+pciSetup(12);
+
+/* InitialiseInterrupt
   cli();    // switch interrupts off while messing with their settings  
   PCICR =0x04;          // Enable PCINT2 interrupt
   PCMSK2 = 0b00010111;
-  PCIFR &= ~0x04;
+//  PCIFR &= ~0x04;
   sei();    // turn interrupts back on
   PCIFR &= ~0x04;
+*/
 }
   
 
@@ -48,9 +66,12 @@ void loop(){
     Serial.println("R-OFF");
   }
 }
-*/
-ISR(PCINT2_vect){
+
+ISR(PCINT0_vect){
+//  cli();    // switch interrupts off
+delay (400);
   Serial.println(" - int - ");
-  PCIFR = 0;
-}
+//  sei();    // turn interrupts back on
+  PCIFR = 0x04;
+*/  
 

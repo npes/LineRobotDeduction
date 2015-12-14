@@ -23,7 +23,7 @@ void loop() {
   // put your main code here, to run repeatedly:
 int stateLeftSensor=digitalRead (leftSensor);
 int stateRightSensor=digitalRead (rightSensor);
-delay(20);
+//delay(5);
 int spd1=112; //turn speed fast wheel
 int spd2=100; //forward speed
 int spd3=0; //turn speed slow wheel
@@ -72,6 +72,6 @@ else if (stateLeftSensor==HIGH &&  stateRightSensor==HIGH){
 
   digitalWrite(motorRightA, LOW);
   digitalWrite(motorRightB, HIGH);
-  delay (500);
+  delay (200);
 }
 }

@@ -1,77 +1,37 @@
-//PCINT0_vect D8 - D13
-// PCINT1_vect A0 - A5
-// PCINT2_vect D0 - D7
-void pciSetup(byte pin)
-{
-  *digitalPinToPCMSK(pin) |= bit (digitalPinToPCMSKbit(pin));  // enable pin
-   PCIFR  |= bit (digitalPinToPCICRbit(pin)); // clear any outstanding interrupt
-   PCICR  |= bit (digitalPinToPCICRbit(pin)); // enable interrupt for the group
-}
-ISR (PCINT0_vect) // handle pin change interrupt for D8 to D13 here
-{
-  delay (400);
-  digitalRead(12);
-  Serial.println(" - int - ");
-}
-ISR (PCINT1_vect) // handle pin change interrupt for A0 to A5 here
-{
-  //digitalWrite(13,digitalRead(A0));
-}
-ISR (PCINT2_vect) // handle pin change interrupt for D0 to D7 here
-{
-  //digitalWrite(13,digitalRead(7));
-}
-
-void setup() 
-{
-  Serial.begin(9600);
-  
-// initialise analog port as input and setting pull up resisters
-  pinMode(12, INPUT_PULLUP);     // Pin 12 is input to which a switch is connected
-//  pinMode(1, INPUT_PULLUP);    // Pin A1 is input to which a switch is connected
-//  pinMode(2, INPUT_PULLUP);    // Pin A2 is input to which a switch is connected
-//  pinMode(4, INPUT_PULLUP);    // Pin A3 is input to which a switch is connected
-
-//enable interrupt for pin
-
-pciSetup(12);
-
-/* InitialiseInterrupt
-  cli();    // switch interrupts off while messing with their settings  
-  PCICR =0x04;          // Enable PCINT2 interrupt
-  PCMSK2 = 0b00010111;
-//  PCIFR &= ~0x04;
-  sei();    // turn interrupts back on
-  PCIFR &= ~0x04;
+/*
+Copyright 2011 Lex.V.Talionis at gmail
+This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 */
+#include <PinChangeInt.h>
+#include <PinChangeIntConfig.h>
+
+#define PIN 12  // the pin we are interested in
+volatile byte burp=0;    // a counter to see how many times the pin has changed
+byte cmd=0;     // a place to put our serial data
+
+void setup() {
+  Serial.begin(9600);
+  Serial.print("PinChangeInt test on pin ");
+  Serial.print(PIN);
+  Serial.println();
+  pinMode(PIN, INPUT);     //set the pin to input
+  digitalWrite(PIN, HIGH); //use the internal pullup resistor
+  PCintPort::attachInterrupt(PIN, burpcount,RISING); // attach a PinChange Interrupt to our pin on the rising edge
+// (RISING, FALLING and CHANGE all work with this library)
+// and execute the function burpcount when that pin changes
+  }
+
+void loop() {
+  cmd=Serial.read();  
+  if (cmd=='p')
+  {
+    Serial.print("burpcount:\t");
+    Serial.println(burp, DEC);
+  }
+  cmd=0;
 }
-  
 
-void loop(){
+void burpcount()
+{
+  burp++;
 }
-
-// interrupt service routine
-/*ISR(PCINT1_vect) {    // Interrupt service routine. Every single PCINT8..14 (=ADC0..5) change
-            // will generate an interrupt: but this will always be the same interrupt routine
-  if (digitalRead(A0)==0){
-    Serial.println("leftTacho");  
-  }
-  if(digitalRead(A1)==0){
-    Serial.println("rightTacho");    
-  }
-  if (digitalRead(A2)==0){
-    Serial.println("L-OFF");
-  }
-  if(digitalRead(A3)==0){
-    Serial.println("R-OFF");
-  }
-}
-
-ISR(PCINT0_vect){
-//  cli();    // switch interrupts off
-delay (400);
-  Serial.println(" - int - ");
-//  sei();    // turn interrupts back on
-  PCIFR = 0x04;
-*/  
-

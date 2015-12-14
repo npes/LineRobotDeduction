@@ -26,8 +26,6 @@
 // For the Analog Input pins used as digital input pins, and you can use 14, 15, 16, etc.
 // or you can use A0, A1, A2, etc. (the Arduino code comes with #define's
 // for the Analog Input pins and will properly recognize e.g., pinMode(A0, INPUT);
-#define PIN1 12
-#define PIN2 11
 #define PIN3 4
 
 uint8_t latest_interrupted_pin;
@@ -44,36 +42,11 @@ void pin3func() {
 }
 
 void setup() {
-  pinMode(PIN1, INPUT); digitalWrite(PIN1, HIGH);
-  PCintPort::attachInterrupt(PIN1, &quicfunc, FALLING);  // add more attachInterrupt code as required
-  pinMode(PIN2, INPUT); digitalWrite(PIN2, HIGH);
-  PCintPort::attachInterrupt(PIN2, &quicfunc, FALLING);
   pinMode(PIN3, INPUT); digitalWrite(PIN3, HIGH);
-  PCintPort::attachInterrupt(PIN3, &pin3func, FALLING);
+  PCintPort::attachInterrupt(PIN3, pin3func, FALLING);  // add more attachInterrupt code as required
   Serial.begin(9600);
-  Serial.println("---------------------------------------");
 }
 
-uint8_t i;
+//uint8_t i;
 void loop() {
-  uint8_t count;
-  Serial.print(".");
-  delay(1000);
-  for (i=0; i < 20; i++) {
-    if (interrupt_count[i] != 0) {
-      count=interrupt_count[i];
-      interrupt_count[i]=0;
-      Serial.print("Count for pin ");
-      if (i < 14) {
-        Serial.print("D");
-        Serial.print(i, DEC);
-      } else {
-        Serial.print("A");
-        Serial.print(i-14, DEC);
-      }
-      Serial.print(" is ");
-      Serial.println(count, DEC);
-    }
-  }
 }
-

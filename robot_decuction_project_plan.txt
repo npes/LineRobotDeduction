@@ -1,0 +1,31 @@
+Plan for projekt
+
+week 50:
+ - research black line detection:
+   * using interupts, different pins
+   * using different methods
+
+ - research interrupt on pin 2, 3:
+   * test of sensors on interrupt pin 2, 3
+
+ - research interruot on all pins:
+   * different method, pros & cons
+   * alternativ seloutions
+
+ - To do:
+   * tacometer:
+     * speed tracking
+     * precision control
+   * Obstacle avoidance
+     * button or sensor ?
+     * what should the car do when meeting obstacle ?
+   * Line follow
+     * bulletproof line follow routine
+       * detect black line insted of white surface 
+       * try with interrupt on sensors
+       * experiment and finetune
+   * Pimping:
+     * Front, back lights
+     * Oled display
+     * 3d enclosure made in fablab
+     * greeting card melody 

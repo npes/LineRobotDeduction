@@ -25,31 +25,31 @@ pinMode (R_Motor_Ena, OUTPUT); // pin 11 på arduino forbunet til pin 9 på moto
   
 
 void loop(){
-  delay (1000);  
+  delay (200);  
   driveforward (2,200);
-  delay (1000);
+  delay (200);
   sharpturn (1,500,200);
-  delay (1000);
+  delay (200);
   sharpturn (2,500,200);
-  delay (1000);
+  delay (200);
   drivereverse (2,200);
-  delay (1000);
+  delay (200);
   drivereverse (2,200);
-  delay (1000);
+  delay (200);
   sharpturn (1,500,200);
-  delay (1000);
+  delay (200);
   drivereverse (2,200);
-  delay (1000);
+  delay (200);
   sharpturn (1,500,200);
-  delay (1000);
+  delay (200);
   drivereverse (2,200);
-  delay (1000);
+  delay (200);
   sharpturn (1,500,200);
-  delay (1000);
+  delay (200);
   drivereverse (2,200);
-  delay (1000);
+  delay (200);
   sharpturn (1,500,200);
-  delay (1000);
+  delay (200);
 }
 
 // Function declarations

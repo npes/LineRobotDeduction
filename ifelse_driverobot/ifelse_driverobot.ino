@@ -24,10 +24,10 @@ void loop() {
 int stateLeftSensor=digitalRead (leftSensor);
 int stateRightSensor=digitalRead (rightSensor);
 //delay(5);
-int spd1=100; //turn speed fast wheel
-int spd2=80; //forward speed
+int spd1=120; //turn speed fast wheel
+int spd2=150; //forward speed
 int spd3=0; //turn speed slow wheel
-int spd4=80; //reverse speed
+int spd4=100; //reverse speed
 
 if (stateLeftSensor==LOW &&  stateRightSensor==HIGH) {
 
@@ -51,7 +51,7 @@ else if (stateLeftSensor==HIGH &&  stateRightSensor==LOW){
   digitalWrite(motorRightA, HIGH);
   digitalWrite(motorRightB, LOW);
 }
-else if (stateLeftSensor==LOW &&  stateRightSensor==LOW){
+else if (stateLeftSensor==HIGH &&  stateRightSensor==HIGH){
 
   analogWrite(motorLeftSpeed, spd2);
   analogWrite(motorRightSpeed, spd2);
@@ -62,7 +62,7 @@ else if (stateLeftSensor==LOW &&  stateRightSensor==LOW){
   digitalWrite(motorRightA, HIGH);
   digitalWrite(motorRightB, LOW);
 }
-else if (stateLeftSensor==HIGH &&  stateRightSensor==HIGH){
+else if (stateLeftSensor==LOW &&  stateRightSensor==LOW){
 
   analogWrite(motorLeftSpeed, spd4);
   analogWrite(motorRightSpeed, spd4);
@@ -72,6 +72,6 @@ else if (stateLeftSensor==HIGH &&  stateRightSensor==HIGH){
 
   digitalWrite(motorRightA, LOW);
   digitalWrite(motorRightB, HIGH);
-  delay (200);
+//  delay (200);
 }
 }

@@ -1,59 +1,65 @@
-#include <TimerOne.h>
-#include <PinChangeInt.h>
+//libraries
+  #include <TimerOne.h>
+  #include <PinChangeInt.h>
 
-#define leftTaco 7
-#define rightTaco 8
-int leftSensor=12;
-int rightSensor=13;
+//pin definitions
+  const int leftTaco=7;
+  const int rightTaco=8;
+  const int leftSensor=12;
+  const int rightSensor=13;
+  const int motorLeftA=6;
+  const int motorRightA=10;
+  const int motorLeftB=9;
+  const int motorRightB=3;
+  const int motorLeftSpeed=5;
+  const int motorRightSpeed=11;
 
-int motorLeftA=6;
-int motorRightA=10;
-int motorLeftB=9;
-int motorRightB=3;
-int motorLeftSpeed=5;
-int motorRightSpeed=11;
+//variables used in interrupts, use volatile for shared variables
+  volatile int leftCounter = 0;
+  volatile int rightCounter = 0;
+  volatile int setPoint = 15;
+  volatile int spdL = 90;
+  volatile int spdR = 90;
 
-void leftTacoFunc ();
-void rightTacoFunc();
+//global 
+int stateLeftSensor;
+int stateRightSensor;
 
-volatile int leftCounter = 0; // use volatile for shared variables
-volatile int rightCounter = 0; // use volatile for shared variables
-volatile int setPoint = 8;
-volatile int spdL = 30;
-volatile int spdR = 30;
-void SpeedCalibrate(void);
+// function prototypes
+  void leftTacoFunc ();
+  void rightTacoFunc();
+  void SpeedCalibrate(void);
 
 void setup() {
 
-Timer1.initialize(100000); //microseconds
-Timer1.attachInterrupt(SpeedCalibrate); // blinkLED to run every 0.15 seconds
-pinMode(leftTaco, INPUT);
-PCintPort::attachInterrupt(leftTaco, leftTacoFunc, RISING);  // add more attachInterrupt code as required
-pinMode(rightTaco, INPUT);
-PCintPort::attachInterrupt(rightTaco, rightTacoFunc, RISING);
-pinMode (leftSensor, INPUT);
-pinMode (rightSensor, INPUT);
+// interrupt init
+  Timer1.initialize(1000000); //microseconds
+  Timer1.attachInterrupt(SpeedCalibrate); // speedCalibrate to run every 1 second
+  PCintPort::attachInterrupt(leftTaco, leftTacoFunc, RISING);
+  PCintPort::attachInterrupt(rightTaco, rightTacoFunc, RISING);
 
-pinMode (motorLeftA, OUTPUT);
-pinMode (motorRightA, OUTPUT);
-pinMode (motorLeftB, OUTPUT);
-pinMode (motorRightB, OUTPUT);
-pinMode (motorLeftSpeed, OUTPUT);
-pinMode (motorRightSpeed, OUTPUT);
-Serial.begin(9600);
+//pins init
+  pinMode(rightTaco, INPUT);
+  pinMode(leftTaco, INPUT);
+  pinMode (leftSensor, INPUT);
+  pinMode (rightSensor, INPUT);
+  pinMode (motorLeftA, OUTPUT);
+  pinMode (motorRightA, OUTPUT);
+  pinMode (motorLeftB, OUTPUT);
+  pinMode (motorRightB, OUTPUT);
+  pinMode (motorLeftSpeed, OUTPUT);
+  pinMode (motorRightSpeed, OUTPUT);
+  Serial.begin(9600);
 }
 
 
 void loop() {
-int stateLeftSensor=digitalRead (leftSensor);
-int stateRightSensor=digitalRead (rightSensor);
-//delay(5);
-int spd1=80; //turn speed fast wheel
-//int spd2=150; //forward speed
-int spd3=50; //turn speed slow wheel
-//int spd4=90; //reverse speed
 
-if (stateLeftSensor==LOW &&  stateRightSensor==HIGH) {
+//read the IR sensors
+stateLeftSensor=digitalRead (leftSensor);
+stateRightSensor=digitalRead (rightSensor);
+
+if (stateLeftSensor==LOW &&  stateRightSensor==HIGH) { //if true turn right 
 
   analogWrite(motorLeftSpeed, spdL);
   analogWrite(motorRightSpeed, spdR-=50);
@@ -64,10 +70,14 @@ if (stateLeftSensor==LOW &&  stateRightSensor==HIGH) {
   digitalWrite(motorRightA, HIGH);
   digitalWrite(motorRightB, LOW);
 }
-else if (stateLeftSensor==HIGH &&  stateRightSensor==LOW){
+//read the IR sensors
+stateLeftSensor=digitalRead (leftSensor);
+stateRightSensor=digitalRead (rightSensor);
 
-  analogWrite(motorLeftSpeed, spdR-=50);
-  analogWrite(motorRightSpeed, spdL);
+if (stateLeftSensor==HIGH &&  stateRightSensor==LOW){ //if true turn left
+
+  analogWrite(motorLeftSpeed, spdL-=50);
+  analogWrite(motorRightSpeed, spdR);
 
   digitalWrite(motorLeftA, HIGH);
   digitalWrite(motorLeftB, LOW);
@@ -75,7 +85,11 @@ else if (stateLeftSensor==HIGH &&  stateRightSensor==LOW){
   digitalWrite(motorRightA, HIGH);
   digitalWrite(motorRightB, LOW);
 }
-else if (stateLeftSensor==HIGH &&  stateRightSensor==HIGH){
+//read the IR sensors
+stateLeftSensor=digitalRead (leftSensor);
+stateRightSensor=digitalRead (rightSensor);
+
+if (stateLeftSensor==HIGH &&  stateRightSensor==HIGH){ //if true forward
 
   analogWrite(motorLeftSpeed, spdL);
   analogWrite(motorRightSpeed, spdR);
@@ -86,8 +100,12 @@ else if (stateLeftSensor==HIGH &&  stateRightSensor==HIGH){
   digitalWrite(motorRightA, HIGH);
   digitalWrite(motorRightB, LOW);
 }
-else if (stateLeftSensor==LOW &&  stateRightSensor==LOW){
-//delay (10);
+//read the IR sensors
+stateLeftSensor=digitalRead (leftSensor);
+stateRightSensor=digitalRead (rightSensor);
+
+if (stateLeftSensor==LOW &&  stateRightSensor==LOW){ //if true reverse
+
   analogWrite(motorLeftSpeed, spdL);
   analogWrite(motorRightSpeed, spdR);
 
@@ -96,8 +114,9 @@ else if (stateLeftSensor==LOW &&  stateRightSensor==LOW){
 
   digitalWrite(motorRightA, LOW);
   digitalWrite(motorRightB, HIGH);
-//  delay (100);
 }
+
+//debugging
 Serial.print(spdL);
 Serial.print(" - ");
 Serial.println(spdR);
@@ -105,23 +124,31 @@ Serial.print(leftCounter);
 Serial.print(" - ");
 Serial.println(rightCounter);
 }
+/***** functions *****/
 
-void SpeedCalibrate(void){
+//increase or decrease speed according to setpoint
+void SpeedCalibrate(void){ 
+PCintPort::detachInterrupt(leftTaco); //Disable interrupts from taco's while timer1 interrupt 
+PCintPort::detachInterrupt(rightTaco);  
 if (leftCounter<setPoint){
-  spdL+=5;}
+  spdL+=10;}
 if (leftCounter>setPoint){
-  spdL-=5;}
+  spdL-=10;}
 if (rightCounter<setPoint){
-  spdR+=5;}
+  spdR+=10;}
 if (rightCounter>setPoint){
-  spdR-=5;}
+  spdR-=10;}
 leftCounter=0;  
 rightCounter=0;
+PCintPort::attachInterrupt(leftTaco, leftTacoFunc, RISING);
+PCintPort::attachInterrupt(rightTaco, rightTacoFunc, RISING);
 }
 
+//increment left taco counter on each interrupt. 20 interrupts per wheel rotation
 void leftTacoFunc (){
   leftCounter++;
 }
+//increment left taco counter on each interrupt. 20 interrupts per wheel rotation
 void rightTacoFunc(){
   rightCounter++;
 }

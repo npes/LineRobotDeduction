@@ -18,14 +18,14 @@ void rightTacoFunc();
 
 volatile int leftCounter = 0; // use volatile for shared variables
 volatile int rightCounter = 0; // use volatile for shared variables
-volatile int setPoint = 4;
-volatile int spdL = 100;
-volatile int spdR = 100;
+volatile int setPoint = 8;
+volatile int spdL = 30;
+volatile int spdR = 30;
 void SpeedCalibrate(void);
 
 void setup() {
 
-Timer1.initialize(60000); //microseconds
+Timer1.initialize(100000); //microseconds
 Timer1.attachInterrupt(SpeedCalibrate); // blinkLED to run every 0.15 seconds
 pinMode(leftTaco, INPUT);
 PCintPort::attachInterrupt(leftTaco, leftTacoFunc, RISING);  // add more attachInterrupt code as required
@@ -40,7 +40,7 @@ pinMode (motorLeftB, OUTPUT);
 pinMode (motorRightB, OUTPUT);
 pinMode (motorLeftSpeed, OUTPUT);
 pinMode (motorRightSpeed, OUTPUT);
-
+Serial.begin(9600);
 }
 
 
@@ -48,15 +48,15 @@ void loop() {
 int stateLeftSensor=digitalRead (leftSensor);
 int stateRightSensor=digitalRead (rightSensor);
 //delay(5);
-int spd1=100; //turn speed fast wheel
-int spd2=150; //forward speed
-int spd3=40; //turn speed slow wheel
-int spd4=90; //reverse speed
+int spd1=80; //turn speed fast wheel
+//int spd2=150; //forward speed
+int spd3=50; //turn speed slow wheel
+//int spd4=90; //reverse speed
 
 if (stateLeftSensor==LOW &&  stateRightSensor==HIGH) {
 
-  analogWrite(motorLeftSpeed, spd1);
-  analogWrite(motorRightSpeed, spd3);
+  analogWrite(motorLeftSpeed, spdL);
+  analogWrite(motorRightSpeed, spdR-=50);
 
   digitalWrite(motorLeftA, HIGH);
   digitalWrite(motorLeftB, LOW);
@@ -66,8 +66,8 @@ if (stateLeftSensor==LOW &&  stateRightSensor==HIGH) {
 }
 else if (stateLeftSensor==HIGH &&  stateRightSensor==LOW){
 
-  analogWrite(motorLeftSpeed, spd3);
-  analogWrite(motorRightSpeed, spd1);
+  analogWrite(motorLeftSpeed, spdR-=50);
+  analogWrite(motorRightSpeed, spdL);
 
   digitalWrite(motorLeftA, HIGH);
   digitalWrite(motorLeftB, LOW);
@@ -87,7 +87,7 @@ else if (stateLeftSensor==HIGH &&  stateRightSensor==HIGH){
   digitalWrite(motorRightB, LOW);
 }
 else if (stateLeftSensor==LOW &&  stateRightSensor==LOW){
-
+//delay (10);
   analogWrite(motorLeftSpeed, spdL);
   analogWrite(motorRightSpeed, spdR);
 
@@ -96,8 +96,14 @@ else if (stateLeftSensor==LOW &&  stateRightSensor==LOW){
 
   digitalWrite(motorRightA, LOW);
   digitalWrite(motorRightB, HIGH);
-//  delay (200);
+//  delay (100);
 }
+Serial.print(spdL);
+Serial.print(" - ");
+Serial.println(spdR);
+Serial.print(leftCounter);
+Serial.print(" - ");
+Serial.println(rightCounter);
 }
 
 void SpeedCalibrate(void){

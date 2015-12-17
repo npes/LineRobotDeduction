@@ -17,9 +17,9 @@
 //variables used in interrupts, use volatile for shared variables
   volatile int leftCounter = 0;
   volatile int rightCounter = 0;
-  volatile int setPoint = 15;
-  volatile int spdL = 90;
-  volatile int spdR = 90;
+  volatile int setPoint = 80;
+  volatile int spdL = 150;
+  volatile int spdR = 150;
 
 //global 
 int stateLeftSensor;
@@ -49,7 +49,7 @@ void setup() {
   pinMode (motorRightB, OUTPUT);
   pinMode (motorLeftSpeed, OUTPUT);
   pinMode (motorRightSpeed, OUTPUT);
-  Serial.begin(9600);
+//  Serial.begin(9600);
 }
 
 
@@ -117,12 +117,12 @@ if (stateLeftSensor==LOW &&  stateRightSensor==LOW){ //if true reverse
 }
 
 //debugging
-Serial.print(spdL);
+/*Serial.print(spdL);
 Serial.print(" - ");
 Serial.println(spdR);
 Serial.print(leftCounter);
 Serial.print(" - ");
-Serial.println(rightCounter);
+Serial.println(rightCounter);*/
 }
 /***** functions *****/
 

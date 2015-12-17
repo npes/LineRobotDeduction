@@ -1,4 +1,4 @@
-//PinChangeInt is taken from https://code.google.com/p/arduino-pinchangeint/downloads/detail?name=pinchangeint-v2.19beta.zip&can=2&q=
+//PinChangeInt is taken from https://github.com/GreyGnome/PinChangeInt
 
 // PinChangeIntExample, version 1.1 Sun Jan 15 06:24:19 CST 2012
 // See the Wiki at http://code.google.com/p/arduino-pinchangeint/wiki for more information.

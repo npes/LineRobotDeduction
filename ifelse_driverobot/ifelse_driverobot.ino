@@ -24,6 +24,7 @@ void setup(void)
   Serial.begin(9600);
 }
 
+<<<<<<< HEAD
 void loop(void)
 {
   // slowly increase the PWM fan speed
@@ -34,5 +35,38 @@ void loop(void)
     Timer1.pwm(fanPin, (dutyCycle / 100) * 1023);
     delay(500);
   }
+=======
+void loop() {
+  // put your main code here, to run repeatedly:
+int stateLeftSensor=digitalRead (leftSensor);
+int stateRightSensor=digitalRead (rightSensor);
+//delay(5);
+int spd1=100; //turn speed fast wheel
+int spd2=150; //forward speed
+int spd3=40; //turn speed slow wheel
+int spd4=90; //reverse speed
+
+if (stateLeftSensor==LOW &&  stateRightSensor==HIGH) {
+
+  analogWrite(motorLeftSpeed, spd1);
+  analogWrite(motorRightSpeed, spd3);
+
+  digitalWrite(motorLeftA, HIGH);
+  digitalWrite(motorLeftB, LOW);
+
+  digitalWrite(motorRightA, HIGH);
+  digitalWrite(motorRightB, LOW);
+}
+else if (stateLeftSensor==HIGH &&  stateRightSensor==LOW){
+
+  analogWrite(motorLeftSpeed, spd3);
+  analogWrite(motorRightSpeed, spd1);
+
+  digitalWrite(motorLeftA, HIGH);
+  digitalWrite(motorLeftB, LOW);
+
+  digitalWrite(motorRightA, HIGH);
+  digitalWrite(motorRightB, LOW);
+>>>>>>> origin/master
 }
 

@@ -24,10 +24,10 @@ void loop() {
 int stateLeftSensor=digitalRead (leftSensor);
 int stateRightSensor=digitalRead (rightSensor);
 //delay(5);
-int spd1=150; //turn speed fast wheel
-int spd2=150; //forward speed
+int spd1=100; //turn speed fast wheel
+int spd2=100; //forward speed
 int spd3=0; //turn speed slow wheel
-int spd4=120; //reverse speed
+int spd4=100; //reverse speed
 
 if (stateLeftSensor==LOW &&  stateRightSensor==HIGH) {
 

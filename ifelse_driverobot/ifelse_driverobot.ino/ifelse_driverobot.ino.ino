@@ -1,11 +1,11 @@
-int leftSensor=12;
+int leftSensor=2;
 int rightSensor=13;
-int motorLeftA=6;
-int motorRightA=10;
-int motorLeftB=9;
-int motorRightB=3;
-int motorLeftSpeed=5;
-int motorRightSpeed=11;
+int motorLeftA=6; //2
+int motorRightA=10; //10
+int motorLeftB=9;//7
+int motorRightB=3;//15
+int motorLeftSpeed=5;//1
+int motorRightSpeed=11;//9
 
 void setup() {
   // put your setup code here, to run once:
@@ -37,10 +37,10 @@ if (stateLeftSensor==LOW &&  stateRightSensor==HIGH) {
   digitalWrite(motorLeftA, HIGH);
   digitalWrite(motorLeftB, LOW);
 
-  digitalWrite(motorRightA, HIGH);
-  digitalWrite(motorRightB, LOW);
+  digitalWrite(motorRightA, LOW);
+  digitalWrite(motorRightB, HIGH);
 }
-else if (stateLeftSensor==HIGH &&  stateRightSensor==LOW){
+/*else if (stateLeftSensor==HIGH &&  stateRightSensor==LOW){
 
   analogWrite(motorLeftSpeed, spd3);
   analogWrite(motorRightSpeed, spd1);
@@ -67,11 +67,11 @@ else if (stateLeftSensor==LOW &&  stateRightSensor==LOW){
   analogWrite(motorLeftSpeed, spd4);
   analogWrite(motorRightSpeed, spd4);
 
-  digitalWrite(motorLeftA, LOW);
-  digitalWrite(motorLeftB, HIGH);
+  digitalWrite(motorLeftA, LOW);//2
+  digitalWrite(motorLeftB, HIGH);//7
 
-  digitalWrite(motorRightA, LOW);
-  digitalWrite(motorRightB, HIGH);
+  digitalWrite(motorRightA, LOW);//10
+  digitalWrite(motorRightB, HIGH);//15
 //  delay (200);
-}
+}*/
 }
